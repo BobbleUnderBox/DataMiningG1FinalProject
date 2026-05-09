@@ -1,0 +1,122 @@
+# ============================================================
+# BNPL 信用風險分類專案 - 設定檔案（簡化版本）
+# ============================================================
+# 此設定檔案支援多使用者、多平台使用
+# 僅包含資料前處理與 EDA 相關設定
+# 後續檢定、採礦、模型等由其他貢獻者決策實作
+
+# ============================================================
+# 1. 資料路徑設定
+# ============================================================
+data:
+  # 原始資料目錄（存放從 Kaggle 或其他來源下載的資料）
+  raw_dir: "data/raw"
+  
+  # 中間資料目錄（存放 EDA、特徵工程後的過渡資料）
+  interim_dir: "data/interim"
+  
+  # 處理完成的資料目錄（立即可用於建模的特徵資料）
+  processed_dir: "data/processed"
+  
+  # 完整的原始資料集檔案名
+  raw_filename: "Buy_Now_Pay_Later_BNPL_CreditRisk_Dataset.csv"
+
+# ============================================================
+# 2. Kaggle API 設定
+# ============================================================
+kaggle:
+  # 是否啟用 Kaggle 資料集下載
+  # 選項: true (自動下載) | false (使用本地快取)
+  enable_download: false
+  
+  # Kaggle API 身份驗證方法
+  # 選項: 
+  #   - "env_vars": 使用系統環境變數 (KAGGLE_USERNAME, KAGGLE_KEY)
+  #   - "credentials_file": 使用官方 kaggle.json 檔案
+  #   - "custom_token_file": 使用自定義純文字 token 檔案 (設定為 KAGGLE_API_TOKEN)
+  auth_method: "env_vars"
+  
+  # Kaggle 資料集識別碼
+  dataset_id: "shree0910/buy-now-and-pay-later-fintech-ml-dataset"
+  
+  # 身份驗證檔案位置
+  # 若為 "credentials_file": 通常是 ~/.kaggle/kaggle.json
+  # 若為 "custom_token_file": 您自定義的路徑，例如 C:\Users\User\.kaggle\access_token
+  credentials_path: "~/.kaggle/kaggle.json"
+  
+  # Kaggle 使用者名稱和 API Key（僅當 auth_method 為 "env_vars" 時使用）
+  # ⚠️  建議：在環境變數中設置 KAGGLE_USERNAME 和 KAGGLE_KEY，而不是在此檔案中
+  # 可選擇在此處設置預設值，或留空讓程式從環境變數讀取
+  username: ""  # 留空則從環境變數 KAGGLE_USERNAME 讀取
+  api_key: ""   # 留空則從環境變數 KAGGLE_KEY 讀取
+
+# ============================================================
+# 3. 資料快取設定
+# ============================================================
+cache:
+  # 是否使用本地快取（Kaggle 的預設快取目錄）
+  use_kagglehub_cache: true
+  
+  # 本地快取路徑（Kaggle 預設快取位置）
+  # Windows: C:\Users\{username}\.cache\kagglehub\datasets\...
+  # Linux/Mac: ~/.cache/kagglehub/datasets/...
+  # 通常無需修改，留空使用預設值
+  cache_dir: ""
+
+# ============================================================
+# 4. 離群值處理設定
+# ============================================================
+outlier_handling:
+  # 離群值檢測方法
+  # 選項: "iqr" (四分位距法) | "zscore" (Z-score 法)
+  detection_method: "iqr"
+  
+  # IQR 方法參數（離群值界限係數）
+  iqr_multiplier: 1.5
+  
+  # 各欄位的處理策略
+  # "keep": 保留（使用變換處理）
+  # "remove": 移除
+  field_strategies:
+    monthly_income:
+      action: "keep"
+      transform: "log"
+    repayment_delay_days:
+      action: "keep"
+      transform: "log1p"
+    debt_to_income_ratio:
+      action: "keep"
+      transform: "log"
+    purchase_amount:
+      action: "keep"
+      transform: "log"
+    credit_score:
+      action: "keep"
+      transform: "log"
+    missed_payments:
+      action: "keep"
+      transform: "log1p"
+
+# ============================================================
+# 5. 日誌記錄設定
+# ============================================================
+logging:
+  # 日誌記錄級別
+  level: "INFO"
+  
+  # 是否將日誌寫入檔案
+  to_file: true
+  
+  # 日誌目錄
+  log_dir: "logs"
+  
+  # 日誌格式
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # 專案資訊
+  version: "1.1.0"
+  description: "Buy-Now-Pay-Later (BNPL) 信用風險分類與預測"
+  data_source: "Kaggle - BNPL Credit Risk Dataset"
+  created_date: "2026-05-06"
+  maintainers:
+    - name: "Data Science Team"
