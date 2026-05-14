@@ -101,7 +101,7 @@ make data
 產出到 data/interim
 
 疑問:
-- cell 7 target_columns 也太少，數值型別欄位應該更多才對
+- cell 7 target_columns 也太少，數值型別欄位應該更多才對(ans. @EricChen 說會補上)
 - cell 8 log 對象 如何挑出來的
 - cell 8 log 完後是否並無存到 interim 輸出中 (ans. 有的，function 仔細看有 return)
 - 取 log 完後為何不直接取代原本的數值
@@ -110,7 +110,7 @@ make data
 改了 cell 9 因為 pandas 版本不同而造成的型別錯誤
 
 疑問:
-- data/process, data/processed 兩個都沒用到，應該用 processed 來取代 interim 嗎
+- data/process, data/processed 兩個都沒用到，應該用 processed 來取代 interim 嗎(會再改正)
 
 # 試跑 03_statistical_methods.inpynb (5/11)
 第一步讀檔的路徑就發生錯誤
@@ -134,3 +134,13 @@ missed_payments, repayment_delay_days, risk_score）最有力，傳統 credit_sc
 - 第一格的資料來源為何不是直接取用處理完的資料，前面應該已經做好資料處理了
 - 少了對時間分析
 - credit_score 應該用 interval 方法去做?
+ 
+# 03_statistical_methods.inpynb 修正及增加功能計畫 (5/14)
+後面階段的分析都不是用取 log 完的結果去進行分析
+所以我開始更改
+1. 此檔案路徑問題
+2. 沒有用 log 後數值分析的問題 (spearson 是 ranking 的，所以單調函數對結果沒有影響，顆顆)
+3. 想多做 PCA
+
+# 03_statistical_methods.inpynb 分析能用結果 (5/14)
+category data 中只有 employment_type 與結果有足夠關聯度
