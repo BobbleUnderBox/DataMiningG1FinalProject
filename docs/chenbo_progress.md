@@ -146,8 +146,8 @@ missed_payments, repayment_delay_days, risk_score）最有力，傳統 credit_sc
 category data 中只有 employment_type 與結果有足夠關聯度
 
 # 列出截至目前為止的待處理事項 (5/16)
-- push 目前進度上去
-- 看 @EricChen 改的怎麼樣
-- merge 各個分支
+- ~~push 目前進度上去~~
+- ~~看 @EricChen 改的怎麼樣~~
+- ~~merge 各個分支~~
 - 整理前三步驟結論能怎麼幫助資料探勘
 - 做 PCA
