@@ -420,7 +420,7 @@ class DataLoader:
         else:
             raise ValueError("不支持的檔案格式")
         
-        logger.info(f"✅ 中間資料已儲存: {filepath}")
+        logger.info(f"✅ 中間資料已儲存 (interim): {filepath}")
     
     def save_processed_data(self, df: pd.DataFrame, filename: str, format: str = 'csv'):
         """
@@ -443,7 +443,7 @@ class DataLoader:
         else:
             raise ValueError("不支持的檔案格式")
         
-        logger.info(f"✅ 處理完成的資料已儲存: {filepath}")
+        logger.info(f"✅ 處理完成的資料已儲存 (processed): {filepath}")
 
 
 # ============================================================
