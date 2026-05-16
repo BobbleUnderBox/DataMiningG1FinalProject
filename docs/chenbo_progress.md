@@ -102,9 +102,9 @@ make data
 
 疑問:
 - cell 7 target_columns 也太少，數值型別欄位應該更多才對(ans. @EricChen 說會補上)
-- cell 8 log 對象 如何挑出來的
+- cell 8 log 對象 如何挑出來的 (02中有列出所有的分布狀況)
 - cell 8 log 完後是否並無存到 interim 輸出中 (ans. 有的，function 仔細看有 return)
-- 取 log 完後為何不直接取代原本的數值
+- 取 log 完後為何不直接取代原本的數值 (確實需要保留)
 
 # 試跑 02_exploratory_data_analysis.ipynb (5/11)
 改了 cell 9 因為 pandas 版本不同而造成的型別錯誤
@@ -116,7 +116,7 @@ make data
 第一步讀檔的路徑就發生錯誤
 
 疑問:
-- 欲取用之檔案似乎為 raw_data? 為何不用 processed 解?
+- 欲取用之檔案似乎為 raw_data? 為何不用 processed 解?(已經解決)
 
 # 03_statistical_methods.inpynb (5/13)
 
@@ -131,16 +131,23 @@ Mann–Whitney U 比較違約/非違約兩組分布差異。整體結論是：�
 missed_payments, repayment_delay_days, risk_score）最有力，傳統 credit_score 幾乎不顯著。另有 heatmap 輔助解讀相關結構。
 
 疑問:
-- 第一格的資料來源為何不是直接取用處理完的資料，前面應該已經做好資料處理了
+- 第一格的資料來源為何不是直接取用處理完的資料，前面應該已經做好資料處理了(已經解決)
 - 少了對時間分析
 - credit_score 應該用 interval 方法去做?
  
 # 03_statistical_methods.inpynb 修正及增加功能計畫 (5/14)
 後面階段的分析都不是用取 log 完的結果去進行分析
 所以我開始更改
-1. 此檔案路徑問題
+1. 此檔案路徑問題 (已經解決)
 2. 沒有用 log 後數值分析的問題 (spearson 是 ranking 的，所以單調函數對結果沒有影響，顆顆)
 3. 想多做 PCA
 
 # 03_statistical_methods.inpynb 分析能用結果 (5/14)
 category data 中只有 employment_type 與結果有足夠關聯度
+
+# 列出截至目前為止的待處理事項 (5/16)
+- push 目前進度上去
+- 看 @EricChen 改的怎麼樣
+- merge 各個分支
+- 整理前三步驟結論能怎麼幫助資料探勘
+- 做 PCA
