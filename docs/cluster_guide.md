@@ -8,6 +8,18 @@
 
 ```
 flowchart TD
+    %% Define Styles
+    style A fill:#f9f2f4,stroke:#d9534f,stroke-width:2px
+    style B1 fill:#e8f4f8,stroke:#5bc0de,stroke-width:2px
+    style B2 fill:#e8f4f8,stroke:#5bc0de,stroke-width:2px
+    style B3 fill:#e8f4f8,stroke:#5bc0de,stroke-width:2px
+    style B4 fill:#e8f4f8,stroke:#5bc0de,stroke-width:2px
+    style C1 fill:#f4f9e8,stroke:#5cb85c,stroke-width:2px
+    style C2 fill:#f4f9e8,stroke:#5cb85c,stroke-width:2px
+    style D1 fill:#fcf8e3,stroke:#f0ad4e,stroke-width:2px
+    style D2 fill:#fcf8e3,stroke:#f0ad4e,stroke-width:2px
+    style D3 fill:#fcf8e3,stroke:#f0ad4e,stroke-width:2px
+    style E fill:#e8e8f8,stroke:#428bca,stroke-width:2px
 
     A([原始混合型資料集]) --> Phase1
     
@@ -15,7 +27,7 @@ flowchart TD
         direction TB
         B1(1. 處理離群值\n對 Ratio/Interval 執行 Winsorization 截尾)
         B2(2. 矯正偏態\n對偏態數值特徵取 Log 或 Yeo-Johnson 轉換)
-        B3(3. 時間特徵編碼\nmonth/dayofweek 轉為 Sine/Cosine)
+        B3(3. 時間特徵編碼\n依據時間尺度進行週期性或類別處理)
         B4(4. 類別與順序特徵處理\nOrdinal Label化 / Nominal One-Hot或保留給特定演算法)
         
         B1 --> B2 --> B3 --> B4
@@ -53,13 +65,20 @@ flowchart TD
 
 1. **處理離群值 (Outliers)**
    - **對象**：`monthly_income`, `debt_to_income_ratio`, `risk_score`, `repayment_delay_days`, `missed_payments`
-   - **作法**：使用 **Winsorization (截尾)**。將極端值（例如高於 99% 分位數的值）強制收斂到 99% 的數值邊界，避免極端值在計算距離時拉扯整個幾何空間。
+   - **作法**：使用 **Winsorization (截尾)**。對每個指定欄位執行雙尾截尾：低於 2.5% 分位數的值拉回到下界，高於 97.5% 分位數的值拉回到上界，避免極端值在計算距離時拉扯整個幾何空間。
 2. **矯正偏態 (Skewness Correction)**
    - **對象**：`age`, `monthly_income`, `purchase_amount`, `repayment_delay_days`, `app_usage_frequency`, `debt_to_income_ratio`, `credit_score`
    - **作法**：套用 **Log Transformation (取對數)** 或 `PowerTransformer` (Yeo-Johnson)，讓長尾分佈的資料收斂成接近常態分佈。
-3. **時間特徵轉換 (Cyclical Encoding)**
-   - **對象**：`month`, `dayofweek`, `day`
-   - **作法**：進行 **正餘弦轉換 (Sine/Cosine Encoding)**。將一個週期性變數拆分為兩個特徵（例如 `month_sin` 和 `month_cos`），使演算法能理解時間的首尾相接特性。
+3. **時間特徵轉換 (Time Feature Encoding)** 針對從 `transaction_date` 拆解出的五種時間特徵，依照其特性進行不同處理：
+   - **週期性特徵 (Cyclical Encoding)**：
+      - **對象**：`transaction_month`, `transaction_day`, `transaction_dayofweek`
+      - **作法**：進行 **正餘弦轉換 (Sine/Cosine Encoding)**。因為 12 月與 1 月、星期日與星期一是相鄰的。將單一變數拆分為兩個（例如 monthsin​=sin(2π12month​) 與 monthcos​=cos(2π12month​)），使模型能理解首尾相接的特性。轉換後的數值為 **Interval (區間尺度)**，因為它們代表圓上的相對座標，加減有意義，但乘除無意義，且沒有絕對的「無」之原點（如 0 值不代表「沒有月份」）。
+   - **線性/數值特徵 (Linear/Numerical)**：
+      - **對象**：`transaction_year`
+      - **作法**：年份具有明確的先後大小關係，且沒有週期性。直接作為一般的 **Interval/Ratio（區間/等比數值）** 處理即可（後續可能需要標準化）。
+   - **二元特徵 (Binary Category)**：
+      - **對象**：`transaction_is_weekend`
+      - **作法**：這已經是 0 或 1 的布林值。如果後續使用 K-Prototypes，可將其視為 **Categorical（類別變數）** 處理；若使用其他演算法，則當作已 One-Hot 編碼的特徵處理。
 4. **順序與離散數值轉換**
    - **對象**：`customer_segment`, `bnpl_installments`, `missed_payments`
    - **作法**：使用 **Ordinal Encoding (整數編碼)**（例如 0, 1, 2, 3），以保留其等級或次數的大小關係。
@@ -69,7 +88,7 @@ flowchart TD
 透過特徵間的統計關係來去蕪存菁：
 
 1. **相關性過濾 (Spearman Correlation)**
-   - **作法**：計算所有數值型（含 Ordinal）特徵的 Spearman 相關係數矩陣。
+   - **作法**：計算所有數值型（含 Ordinal 及轉換後的時間特徵）特徵的 Spearman 相關係數矩陣。
    - **篩選**：找出相關係數絕對值 ∣r∣>0.75 的特徵組合，從中保留變異數較大或商業意義較直觀的一個，剔除其餘高度重複的變數。
 2. **FAMD 貢獻度檢定 (Factor Analysis of Mixed Data)**
    - **作法**：執行 FAMD（混合資料的 PCA 延伸）。
