@@ -149,5 +149,11 @@ category data 中只有 employment_type 與結果有足夠關聯度
 - ~~push 目前進度上去~~
 - ~~看 @EricChen 改的怎麼樣~~
 - ~~merge 各個分支~~
-- 整理前三步驟結論能怎麼幫助資料探勘
-- 做 PCA
+- ~~整理前三步驟結論能怎麼幫助資料探勘~~
+
+# 重新整理出了 clustering 要做的事情 (5/17)
+詳情見 cluster_guide.md
+- 前處理
+- 特徵篩選
+- 決定群數
+- k-prototype
