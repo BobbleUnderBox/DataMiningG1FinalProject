@@ -122,7 +122,7 @@ make data
 
 我幫你整理好 03_statistical_methods.ipynb 的流程重點如下：
 
-資料先從 ../data/raw/raw_bnpl_data.csv 讀入，接著做日期拆解（年/月/日/週幾/是否週末）與偏態數值的 log1p 轉換，並輸出前處理後資料到 
+資料先從 ../data/raw/raw_bnpl_data.csv 讀入，接著做日期拆解（年/月/日/週幾/是否週末）與偏態數值的 log1p 轉換，並輸出前處理後資料到
 ../data/interim/01_preprocessed.csv
 。之後再載入此檔進行統計分析。
 

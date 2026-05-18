@@ -68,16 +68,13 @@ flowchart TD
    - **作法**：使用 **Winsorization (截尾)**。對每個指定欄位執行雙尾截尾：低於 2.5% 分位數的值拉回到下界，高於 97.5% 分位數的值拉回到上界，避免極端值在計算距離時拉扯整個幾何空間。
 2. **矯正偏態 (Skewness Correction)**
    - **對象**：`age`, `monthly_income`, `purchase_amount`, `repayment_delay_days`, `app_usage_frequency`, `debt_to_income_ratio`, `credit_score`
-   - **作法**：套用 **Log Transformation (取對數)** 或 `PowerTransformer` (Yeo-Johnson)，讓長尾分佈的資料收斂成接近常態分佈。
+   - **作法**：套用 **Log Transformation (取對數)** 或 `PowerTransformer` (Yeo-Johnson)，讓長尾分佈的資料收斂成接近常態分佈。(`missed_payments`, `repayment_delay_days` 要用 log1p)
 3. **時間特徵轉換 (Time Feature Encoding)** 針對從 `transaction_date` 拆解出的五種時間特徵，依照其特性進行不同處理：
    - **週期性特徵 (Cyclical Encoding)**：
       - **對象**：`transaction_month`, `transaction_day`, `transaction_dayofweek`
       - **作法**：進行 **正餘弦轉換 (Sine/Cosine Encoding)**。因為 12 月與 1 月、星期日與星期一是相鄰的。將單一變數拆分為兩個（例如 monthsin​=sin(2π12month​) 與 monthcos​=cos(2π12month​)），使模型能理解首尾相接的特性。轉換後的數值為 **Interval (區間尺度)**，因為它們代表圓上的相對座標，加減有意義，但乘除無意義，且沒有絕對的「無」之原點（如 0 值不代表「沒有月份」）。
-   - **線性/數值特徵 (Linear/Numerical)**：
-      - **對象**：`transaction_year`
-      - **作法**：年份具有明確的先後大小關係，且沒有週期性。直接作為一般的 **Interval/Ratio（區間/等比數值）** 處理即可（後續可能需要標準化）。
    - **二元特徵 (Binary Category)**：
-      - **對象**：`transaction_is_weekend`
+      - **對象**：`transaction_is_weekend`,`transaction_year`
       - **作法**：這已經是 0 或 1 的布林值。如果後續使用 K-Prototypes，可將其視為 **Categorical（類別變數）** 處理；若使用其他演算法，則當作已 One-Hot 編碼的特徵處理。
 4. **順序與離散數值轉換**
    - **對象**：`customer_segment`, `bnpl_installments`, `missed_payments`

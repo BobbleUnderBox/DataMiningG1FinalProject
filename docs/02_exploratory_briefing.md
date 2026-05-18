@@ -7,5 +7,4 @@ ratio 中
 未偏態 risk_score
 接近 category 的 bnpl_installments,missed_payments
 
-
 time 中 除了天數在月底資料較少，其他時間尺度都蠻平均的
