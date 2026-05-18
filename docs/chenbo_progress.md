@@ -153,8 +153,7 @@ category data 中只有 employment_type 與結果有足夠關聯度
 
 # 重新整理出了 clustering 要做的事情 (5/17)
 詳情見 cluster_guide.md
-- 前處理
-    - ~~離群、時間~~
+- ~~前處理~~
 - 特徵篩選
 - 決定群數
 - k-prototype
