@@ -151,9 +151,14 @@ category data 中只有 employment_type 與結果有足夠關聯度
 - ~~merge 各個分支~~
 - ~~整理前三步驟結論能怎麼幫助資料探勘~~
 
-# 重新整理出了 clustering 要做的事情 (5/17)
+# 重新整理出了 clustering 要做的事情 (5/17)(5/18)
 詳情見 cluster_guide.md
 - ~~前處理~~
 - 特徵篩選
+    - 列出處理前類別與處理後類別
+    - 針對不同類別作檢定篩出與 flag 有關變數
+    - Spearman Correlation 過濾
+    - FAMD 貢獻度檢定 (Factor Analysis of Mixed Data) 過濾
+
 - 決定群數
 - k-prototype
