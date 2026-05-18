@@ -8,7 +8,7 @@ import sys
 import yaml
 import logging
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, cast
 from getpass import getpass
 
 import pandas as pd
@@ -40,7 +40,7 @@ class ConfigLoader:
         # 如果設定路徑不存在，嘗試從專案根目錄查找
         path_obj = Path(config_path)
         if not path_obj.exists():
-            config_path = PROJECT_ROOT / config_path
+            config_path = str(PROJECT_ROOT / config_path)
         
         if not Path(config_path).exists():
             raise FileNotFoundError(f"設定檔不存在: {config_path}")
@@ -48,8 +48,11 @@ class ConfigLoader:
         with open(config_path, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
         
+        if not isinstance(config, dict):
+            raise ValueError(f"設定檔格式錯誤，應為字典/對象: {config_path}")
+        
         logger.info(f"✅ 設定檔已載入: {config_path}")
-        return config
+        return cast(Dict[str, Any], config)
 
 
 class DataDownloader:

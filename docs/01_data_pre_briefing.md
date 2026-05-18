@@ -26,7 +26,7 @@
    - 拆出 `year / month / day / dayofweek / is_weekend`。
 
 6. **離群值檢查（IQR）**
-   - 對目標數值欄位計算 IQR 上下界與離群值數量。
+   - 對目標數值欄位計算 IQR 上下界與離群值數量。     (ratio+inteval 中 monthly_income, debt_to_income_ratio, risk_score, repayment_delay_days, missed_payments 有離群值)
    - 目前以「檢查與回報」為主，未直接刪除資料。
 
 7. **偏態修正（Log / Log1p）**

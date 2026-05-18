@@ -122,7 +122,7 @@ make data
 
 我幫你整理好 03_statistical_methods.ipynb 的流程重點如下：
 
-資料先從 ../data/raw/raw_bnpl_data.csv 讀入，接著做日期拆解（年/月/日/週幾/是否週末）與偏態數值的 log1p 轉換，並輸出前處理後資料到 
+資料先從 ../data/raw/raw_bnpl_data.csv 讀入，接著做日期拆解（年/月/日/週幾/是否週末）與偏態數值的 log1p 轉換，並輸出前處理後資料到
 ../data/interim/01_preprocessed.csv
 。之後再載入此檔進行統計分析。
 
@@ -149,5 +149,12 @@ category data 中只有 employment_type 與結果有足夠關聯度
 - ~~push 目前進度上去~~
 - ~~看 @EricChen 改的怎麼樣~~
 - ~~merge 各個分支~~
-- 整理前三步驟結論能怎麼幫助資料探勘
-- 做 PCA
+- ~~整理前三步驟結論能怎麼幫助資料探勘~~
+
+# 重新整理出了 clustering 要做的事情 (5/17)
+詳情見 cluster_guide.md
+- 前處理
+    - ~~離群、時間~~
+- 特徵篩選
+- 決定群數
+- k-prototype
