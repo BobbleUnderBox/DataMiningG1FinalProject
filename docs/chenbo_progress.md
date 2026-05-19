@@ -155,5 +155,20 @@ category data 中只有 employment_type 與結果有足夠關聯度
 詳情見 cluster_guide.md
 - ~~前處理~~
 - 特徵篩選
+    - ~~列出處理前類別與處理後類別~~
+    - 針對不同類別作檢定篩出與 flag 有關變數
+    - Spearman Correlation 過濾
+    - FAMD 貢獻度檢定 (Factor Analysis of Mixed Data) 過濾
+
 - 決定群數
 - k-prototype
+
+
+# 完成前處理(5/18)
+詳情請見 01_data_pre_briefing.md
+03 step 已經列出處理前類別與處理後類別
+category: Chi-Square-independence
+ordinal:Mann-Whitney 獨立同分布或是異分布(陳柏宇需要聲這些類別在 default_flag = 0,1 下的分布圖，盧再去根據分布做同分布或是異分布)
+Interval/ratio: Mann-Whitney 只有 app_usage_frequency 做獨立同分布，其餘 獨立異分布
+ratio 中例外: risk_score 做 t-test 異分布
+ordinal/interval/ratio: 混在一起做 spearman，篩出相關度>0.75的項目
