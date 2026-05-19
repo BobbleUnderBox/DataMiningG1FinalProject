@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python fix_cells.py)",
+      "Bash(cd \"d:\\\\大三\\\\統計方法與資料採礦\\\\FinalProject\\\\DataMiningG1FinalProject\" && python fix_cells.py && rm fix_cells.py)"
+    ],
+    "additionalDirectories": [
+      "d:\\大三\\統計方法與資料採礦\\FinalProject\\DataMiningG1FinalProject"
+    ]
+  }
+}
