@@ -172,3 +172,40 @@ ordinal:Mann-Whitney 獨立同分布或是異分布(陳柏宇需要聲這些類�
 Interval/ratio: Mann-Whitney 只有 app_usage_frequency 做獨立同分布，其餘 獨立異分布
 ratio 中例外: risk_score 做 t-test 異分布
 ordinal/interval/ratio: 混在一起做 spearman，篩出相關度>0.75的項目
+
+# 架構流程調整討論 (2026-05-21)
+
+針對 docs/prediction_flow.md 的流程調整估時與風險評估：
+
+- 團隊 4 人、各自負責 notebook 的方式下，要補齊切分→訓練→評估→解釋→溝通，整體合理估時約 1.5–3 週。
+- 如果你負責步驟 9（溝通/報告），單獨工期約 3–6 個工作天，但會被前面評估與解釋性輸出卡住。
+- 主要風險：資料外洩修正（切分前/後流程調整）、模型與評估模組化、解釋性輸出不足導致報告難寫。
+
+為了縮短開發時間的最小改動路徑：
+
+可保留不動
+- src/data_loader.py
+- config.yaml 內的資料路徑與 Kaggle 設定
+- Makefile 的 data/eda/preprocess 任務
+- 既有 EDA 圖表與欄位定義文件
+
+必須修改/新增
+- 拆分 notebooks\01_data_preprocessing.ipynb 的前後流程
+- 新增/補齊 split、模型、評估模組或 scripts
+- 更新 notebooks\04_data_mining.ipynb
+- 補上報告輸出流程（供步驟 9 使用）
+
+scripts 的用途說明：
+- scripts 是 CLI 入口，讓 notebook 的流程可以用命令重現與自動化（可掛到 Makefile 的 train/evaluate）
+
+01_data_preprocessing.ipynb 拆分建議：
+- 前切分：載入、資料品質檢查、變數分類、定義 target/features、train/val/test split、保存 raw/interim
+- 後處理：時間特徵、Winsor（只用 train 分位數）、log 轉換、編碼/標準化（只 fit train）、保存 processed
+
+
+## 03_statistical_methods.ipynb (2026/05/21)
+~~Notebook重點問題：target 未定義，Cell 16/19/24 會 NameError；preprocessed_data_types 重複且第一版欄位名錯（*_Log1p, credit_score），易誤用；~~
+
+Mann‑Whitney 清單硬寫未用 dict；Cell 16 依賴前一格 import；~~Chi‑square 只檢查期望次數未處理違反假設~~ 
+
+Briefing問題：結論缺乏可追溯性（無 p 值/樣本數/資料版本/對應 cell），多重比較未提；“Very different”僅視覺描述，建議量化標準。
