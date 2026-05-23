@@ -151,7 +151,7 @@ category data 中只有 employment_type 與結果有足夠關聯度
 - ~~merge 各個分支~~
 - ~~整理前三步驟結論能怎麼幫助資料探勘~~
 
-# 重新整理出了 clustering 要做的事情 (5/17)
+# ~~重新整理出了 clustering 要做的事情 (5/17)~~
 詳情見 cluster_guide.md
 - ~~前處理~~
 - 特徵篩選
@@ -181,6 +181,19 @@ ordinal/interval/ratio: 混在一起做 spearman，篩出相關度>0.75的項目
 - 如果你負責步驟 9（溝通/報告），單獨工期約 3–6 個工作天，但會被前面評估與解釋性輸出卡住。
 - 主要風險：資料外洩修正（切分前/後流程調整）、模型與評估模組化、解釋性輸出不足導致報告難寫。
 
+現有架構與問題：
+- 現有檔案結構：notebooks\01–04 為主流程；src/ 只有 data_loader.py；scripts/ 只有 messages.py；Makefile 僅提供 data/eda/preprocess 任務；config.yaml 管理資料路徑與 Kaggle。
+- 進度狀態：01/02 已試跑並產出 data/interim；03 有讀檔與欄位問題需修；04 尚未完成。
+- 資料流問題：目前主要走 data/raw→data/interim，data/processed 尚未納入主流程，切分與後處理混在 01，易有資料外洩風險。
+- 自動化不足：train/evaluate/interpret/report 尚無 CLI 或模組化出口，難以重現與產出報告。
+
+修改的具體 steps：
+1. 在 docs/prediction_flow.md 明確步驟與輸入/輸出，作為流程單一真相來源。
+2. 拆分 notebooks\01_data_preprocessing.ipynb 成前切分與後處理，並保存 raw/interim/processed。
+3. 補齊 split/preprocess/train/evaluate/interpret/report 的模組與 CLI（scripts），確保只以 train fit/取分位數。
+4. Makefile 增加 train/evaluate 入口，串接 scripts 以便重現。
+5. 更新 notebooks\04_data_mining.ipynb 以呼叫模組並輸出 reports/。
+
 為了縮短開發時間的最小改動路徑：
 
 可保留不動
@@ -201,6 +214,13 @@ scripts 的用途說明：
 01_data_preprocessing.ipynb 拆分建議：
 - 前切分：載入、資料品質檢查、變數分類、定義 target/features、train/val/test split、保存 raw/interim
 - 後處理：時間特徵、Winsor（只用 train 分位數）、log 轉換、編碼/標準化（只 fit train）、保存 processed
+
+## 補充整理（2026-05-22）
+- 整體架構（調整後）：DataLoader/Config → 前切分流程 → data/raw + data/interim → 後處理流程 → data/processed(train/val/test) → scripts/train|evaluate|interpret|report → reports/（供步驟 9）
+- scripts 是否必須：不強制；建議作為可重現 CLI。notebooks 保留敘事與可視化，僅呼叫 src 函式或 scripts 命令。
+- 全體流程應放：docs/prediction_flow.md 作為單一真相來源；若需要更細步驟對照，可新增 docs/pipeline.md（步驟→腳本/輸出路徑）。
+- 可能新增：scripts/split_data.py、scripts/preprocess.py、scripts/train.py、scripts/evaluate.py、scripts/interpret.py、scripts/report.py；src/preprocess.py、src/features.py、src/modeling.py、src/evaluation.py、src/interpretation.py、src/reporting.py。
+- 可能修改：notebooks/01_data_preprocessing.ipynb、notebooks/04_data_mining.ipynb、Makefile(train/evaluate)、docs/prediction_flow.md、config.yaml（參數/路徑）。
 
 
 ## 03_statistical_methods.ipynb (2026/05/21)

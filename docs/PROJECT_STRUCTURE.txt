@@ -1,247 +1,107 @@
-📦 DataMiningG1FinalProject - 項目完整結構
+📦 dataMining - 專案結構（更新：2026-05-22）
 =============================================================
 
-DataMiningG1FinalProject/
+dataMining/
 │
-├── 📁 data/                          ⭐ 資料樞紐（嚴格分層）
-│   ├── raw/                          ├─ 原始資料（Kaggle 下載，勿修改）
+├── .gitignore
+├── README.md
+├── Makefile
+├── pyproject.toml
+├── environment.yml
+├── config.yaml
+├── bnpl_credit_risk.egg-info/          ├─ 可編輯安裝後生成（自動）
+│
+├── data/                               ⭐ 資料目錄
+│   ├── raw/                            ├─ 原始資料（Kaggle/本地）
 │   │   ├── Buy_Now_Pay_Later_BNPL_CreditRisk_Dataset.csv
 │   │   └── .gitkeep
 │   │
-│   ├── interim/                      ├─ 中間資料（EDA、特徵工程輸出）
-│   │   ├── 01_eda_output.csv
-│   │   ├── 02_outlier_analysis.parquet
-│   │   └── .gitkeep
-│   │
-│   └── processed/                    └─ 處理完成的特徵資料（直接用於建模）
-│       ├── train_features.parquet
-│       ├── test_features.parquet
+│   └── processed/                      ├─ 目前已產出的處理結果
+│       ├── 01_preprocessed.csv
 │       └── .gitkeep
 │
-├── 📁 notebooks/                     ⭐ Jupyter Notebooks（按順序編號）
-│   ├── 01_data_preprocessing.ipynb   ├─ 資料加載、清理、轉換
-│   ├── 02_exploratory_data_analysis.ipynb  ├─ EDA、分佈檢驗、異常值分析
-│   ├── 03_statistical_methods.ipynb  ├─ 假設檢驗、方差分析、相關性分析
-│   └── 04_data_mining.ipynb          └─ 模型訓練、評估、超參數優化
+├── notebooks/                          ⭐ 分析流程
+│   ├── 01_data_preprocessing.ipynb
+│   ├── 02_exploratory_data_analysis.ipynb
+│   ├── 03_statistical_methods.ipynb
+│   └── 04_data_mining.ipynb
 │
-├── 📁 src/                           ⭐ 核心 Python 代碼（可復用模塊）
-│   ├── __init__.py                   ├─ 包初始化
-│   ├── data_loader.py                ├─ 資料加載與管理（Kaggle API 支持）
-│   │   ├── ConfigLoader             ├─  配置文件加載
-│   │   ├── DataDownloader           ├─  Kaggle 下載與認證
-│   │   └── DataLoader               └─  資料I/O 管理
-│   │
-│   ├── preprocessor.py               ├─ 資料預處理與特徵工程（待實現）
-│   ├── statistical_tests.py          ├─ 統計檢定與假設檢驗（待實現）
-│   └── models.py                     └─ 模型定義與訓練邏輯（待實現）
+├── src/                                ⭐ 目前核心程式
+│   ├── __init__.py
+│   ├── data_loader.py                  ├─ ConfigLoader/DataDownloader/DataLoader
+│   └── __pycache__/                    └─ 自動生成
 │
-├── 📁 models/                        ⭐ 序列化模型與超參數
-│   ├── best_model.pkl                ├─ 最佳模型
-│   ├── hyperparams.json              ├─ 超參數記錄
-│   ├── model_evaluation_metrics.json └─ 評估指標
+├── scripts/                            ⭐ 工具腳本
+│   └── messages.py                     └─ Makefile 跨平台訊息輸出
+│
+├── docs/                               ⭐ 文件
+│   ├── 01_data_pre_briefing.md
+│   ├── 02_exploratory_briefing.md
+│   ├── 03_statical_briefing.md
+│   ├── chenbo_progress.md
+│   ├── MIGRATION_COMPLETE.md
+│   ├── NOTEBOOK_MIGRATION.md
+│   ├── prediction_flow.md
+│   ├── PROJECT_RESTRUCTURING_SUMMARY.md
+│   ├── PROJECT_STRUCTURE.txt           └─ 本文件
+│   ├── QUICK_START.md
+│   └── variable_meaning.md
+│
+├── models/                             ⭐ 模型輸出（目前為空）
 │   └── .gitkeep
 │
-├── 📁 reports/                       ⭐ 統計分析報告
-│   ├── figures/                      ├─ 自動生成的圖表
-│   │   ├── distribution_analysis.png
-│   │   ├── correlation_heatmap.png
-│   │   ├── outlier_visualization.png
-│   │   ├── model_roc_curve.png
-│   │   └── .gitkeep
-│   │
-│   ├── analysis_report.html          ├─ 最終分析報告
-│   └── model_evaluation.md           └─ 模型性能總結
-│
-├── 📁 tests/                         ⭐ 單元測試與集成測試
-│   ├── test_data_loader.py           ├─ 資料加載器測試
-│   ├── test_preprocessor.py          ├─ 預處理器測試
-│   └── test_statistical_methods.py   └─ 統計方法測試
-│
-├── 📁 logs/                          ⭐ 執行日誌（自動生成）
-│   ├── data_loading.log
-│   ├── preprocessing.log
-│   └── model_training.log
-│
-├── 📄 config.yaml                    ⭐ 項目配置文件（多用戶、多平台支持）
-│   ├── data: 資料路徑配置
-│   ├── kaggle: Kaggle API 設定
-│   ├── outlier_handling: 異常值處理策略
-│   ├── statistical_tests: 統計檢定配置
-│   ├── model: 模型訓練配置
-│   └── logging: 日誌配置
-│
-├── 📄 pyproject.toml                 ⭐ 現代 Python 項目配置 (PEP 517/518)
-│   ├── [build-system]
-│   ├── [project] 基本信息與依賴
-│   ├── [project.optional-dependencies]
-│   │   ├── dev: 開發工具
-│   │   └── ml: 機器學習套件
-│   ├── [tool.black] 代碼格式化
-│   ├── [tool.isort] 導入排序
-│   ├── [tool.mypy] 類型檢查
-│   └── [tool.pytest.ini_options] 測試配置
-│
-├── 📄 Makefile                       ⭐ 任務自動化（跨平台）
-│   ├── install: 安裝依賴
-│   ├── data: 下載資料
-│   ├── eda: 運行 EDA
-│   ├── train: 訓練模型
-│   ├── test: 運行測試
-│   ├── format: 代碼格式化
-│   ├── clean: 清理臨時文件
-│   └── help: 顯示所有命令
-│
-├── 📄 .gitignore                     ⭐ Git 版本控制配置
-│   ├── __pycache__, *.pyc
-│   ├── .venv/, env/
-│   ├── data/raw/*, data/interim/*
-│   ├── models/*, logs/*
-│   ├── .env, kaggle.json（敏感信息）
-│   └── (例外規則: 追蹤關鍵配置文件)
-│
-├── 📄 README.md                      ⭐ 項目文檔（完整項目說明）
-│   ├── 項目概覽
-│   ├── 快速開始
-│   ├── 數據字段說明
-│   ├── 工作流程圖
-│   ├── 常用命令
-│   └── 貢獻指南
-│
-├── 📄 QUICK_START.md                 ⭐ 快速開始指南（新用戶必讀）
-│   ├── 初始化項目
-│   ├── 數據加載方式
-│   ├── 配置 Kaggle API
-│   ├── Makefile 常用命令
-│   └── 故障排除
-│
-├── 📄 NOTEBOOK_MIGRATION.md          ⭐ Notebook 遷移指南
-│   ├── 舊方式 → 新方式對比
-│   ├── 逐步修改指南
-│   ├── 各 Notebook 推薦結構
-│   └── 完整示例代碼
-│
-├── 📄 PROJECT_RESTRUCTURING_SUMMARY.md ⭐ 重構總結（本次改進詳解）
-│   ├── 已完成的改進
-│   ├── 異常值處理策略決定
-│   ├── 立即開始指南
-│   ├── 進階配置
-│   └── 常見問題
-│
-└── 📄 PROJECT_STRUCTURE.txt          ⭐ 本文件（項目結構說明）
+└── reports/                            ⭐ 報表輸出（目前為空）
+    └── figures/
+        └── .gitkeep
 
 =============================================================
 
-🎯 核心改進摘要
+現況摘要（以實際目錄為準）
 =============================================================
 
-✅ 1. 標準化目錄結構
-   └─ 遵循 CCDS v2 與現代 Python 開發規範
-   
-✅ 2. 配置化數據加載系統 (src/data_loader.py)
-   ├─ 支持多用戶、多平台、自定義路徑
-   ├─ 自動 Kaggle API 認證（環境變量/凭证文件/交互式）
-   ├─ 智能緩存管理
-   └─ 中間/處理完成的數據保存與加載
-
-✅ 3. 集中配置管理 (config.yaml)
-   ├─ 異常值處理策略明確記錄
-   ├─ Kaggle 設定配置化
-   ├─ 統計檢定參數可配置
-   └─ 支持多用戶協作
-
-✅ 4. 現代 Python 項目配置 (pyproject.toml)
-   └─ PEP 517/518 標準，易於發佈與分發
-
-✅ 5. 任務自動化 (Makefile)
-   ├─ 跨平台支持 (Windows/Linux/Mac)
-   ├─ 常用命令巨集
-   └─ 代碼質量檢查集成
-
-✅ 6. 完整文檔與指南
-   ├─ README.md - 完整項目文檔
-   ├─ QUICK_START.md - 快速開始
-   ├─ NOTEBOOK_MIGRATION.md - Notebook 遷移指南
-   └─ PROJECT_RESTRUCTURING_SUMMARY.md - 本次改進詳解
+- data/interim 目前尚未建立；現有流程主要輸出到 data/processed。
+- scripts 目前只有 messages.py，尚未有 split/train/evaluate 等 CLI。
+- src 目前僅有 data_loader.py；其他模組（preprocess/modeling/evaluation）尚未落地。
+- models/、reports/ 為空目錄佔位，等待訓練/報告產出。
+- tests/、logs/ 目錄目前不存在；config.yaml 雖有 logging 設定，但尚未寫入檔案。
+- 03/04 notebooks 已存在但仍需整理，詳見 docs/chenbo_progress.md。
 
 =============================================================
 
-🔧 異常值處理策略（重點決定）
+Makefile 任務一覽（現有）
 =============================================================
 
-【核心原則】保留 + 變換（不盲目刪除）
-
-| 字段 | 為什麼保留 | 處理方法 | 檢定前提 |
-|------|----------|--------|--------|
-| monthly_income | 極端富有樣本有效 | Log 變換 | 正態性 |
-| repayment_delay_days | 長期逾期有業務意義 | Robust Scaling | 等方差性 |
-| debt_to_income_ratio | 高杠杆樣本確實存在 | Robust Scaling | 線性性 |
-| risk_score | 複合指標，極值有預測力 | 標準化 | 可靠性 |
-
-【應對檢定前提】
-- 線性模型: Log/Box-Cox 變換 + Robust Scaling
-- 樹模型: 自動處理，建議做 Log 變換改善穩定性
-- 診斷: Shapiro-Wilk (正態性) + Levene (等方差性)
-
-=============================================================
-
-📚 使用流程速查
-=============================================================
-
-1️⃣ 首次設置
-   $ make install              # 安裝依賴
-   $ make data                 # 下載資料
-
-2️⃣ 在 Notebook 中使用
-   from src.data_loader import load_data
-   df = load_data()            # 一行代碼
-
-3️⃣ 完成分析後
-   loader.save_interim_data(df, "01_output.csv")
-
-4️⃣ 常用命令
-   $ make eda                  # EDA
-   $ make preprocess           # 預處理
-   $ make train                # 訓練
-   $ make test                 # 測試
-   $ make format               # 格式化
+- help
+- env-info
+- setup-venv
+- install-all
+- sync-data
+- data
+- eda
+- preprocess
+- test（目前 tests/ 目錄尚未建立）
+- clean
+- clean-all
+- status
 
 =============================================================
 
-💡 重要提醒
+config.yaml 重點（現況）
 =============================================================
 
-⚠️  絕不提交敏感信息到 Git
-    - .gitignore 已配置排除 .env, kaggle.json
-
-⚠️  數據文件不追蹤
-    - data/raw, data/interim 被排除
-    - 考慮使用 DVC 版本控制
-
-⚠️  定期備份模型
-    - models/ 包含訓練的模型
-    - 推薦備份最佳模型
+- data: raw/interim/processed 路徑定義（interim 尚未建立）
+- kaggle: 預設 enable_download = false（偏向本地快取）
+- outlier_handling: IQR 方法與欄位策略已列出（是否已完全套用需再確認）
+- logging: 指定 logs/ 目錄與格式（尚未實際生成檔案）
 
 =============================================================
 
-📖 下一步閱讀順序
+建議閱讀順序（快速上手）
 =============================================================
 
-新用戶:
-  1. README.md - 了解項目概況
-  2. QUICK_START.md - 快速開始
-  3. NOTEBOOK_MIGRATION.md - 如何使用新系統
-  4. 運行 make install && make data
-
-進階配置:
-  1. config.yaml - 修改配置
-  2. PROJECT_RESTRUCTURING_SUMMARY.md - 詳細說明
-  3. src/data_loader.py - 代碼實現
-
-貢獻者:
-  1. README.md 的貢獻指南
-  2. tests/ - 查看測試結構
-  3. src/ - 代碼組織方式
+1. README.md
+2. QUICK_START.md
+3. docs/chenbo_progress.md
+4. docs/prediction_flow.md
 
 =============================================================
-
-🎉 祝你的項目成功！

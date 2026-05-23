@@ -11,9 +11,15 @@
 
 ## 📊 進度更新
 
+### 最新 (5/22) - 現況盤點
+- ✅ 已有資料：`data/raw` 與 `data/processed/01_preprocessed.csv`
+- ⚠️ `data/interim` 尚未建立（但 config.yaml 已保留路徑）
+- ⚠️ `src` 目前僅有 `data_loader.py`；`scripts` 目前只有 `messages.py`
+- ⚠️ `03_statistical_methods.ipynb` 仍有讀檔與欄位問題，`04_data_mining.ipynb` 尚待整理
+
 ### 最新 (5/7) - Windows 相容性與穩定性優化
 - ✅ **解決 Makefile 亂碼**：實作 Python 基礎的訊息系統 (`scripts/messages.py`)，確保 Windows 終端機正確顯示中文與 Emoji。
-- ✅ **路徑自動解析**：修正筆記本路徑問題，透過 `PROJECT_ROOT` 自動偵測，確保 `data/` 與 `logs/` 永遠位於專案根目錄。
+- ✅ **路徑自動解析**：修正筆記本路徑問題，透過 `PROJECT_ROOT` 自動偵測，確保 `data/` 永遠位於專案根目錄。
 - ✅ **環境驗證修復**：修正 `pyproject.toml` 設定錯誤，確保 `make install-all` 流程順暢。
 - ✅ **任務自動化**：優化 `Makefile` 任務，支援一鍵安裝、環境資訊顯示與資料同步。
 
@@ -58,25 +64,26 @@
 ## 📁 專案結構
 
 ```text
-DataMiningG1FinalProject/
+dataMining/
 ├── config.yaml          # 全域設定檔（路徑、參數、策略）
 ├── pyproject.toml       # 專案依賴與現代化打包設定
 ├── Makefile             # 自動化任務腳本（Windows/Unix 雙支援）
 ├── data/                # 資料目錄
 │   ├── raw/             # 原始資料（Kaggle 下載）
-│   ├── interim/         # 中間處理資料（EDA 過程）
-│   └── processed/       # 最終特徵資料（建模用）
+│   └── processed/       # 目前已產出處理結果（01_preprocessed.csv）
 ├── notebooks/           # Jupyter Notebooks 分析流程
 │   ├── 01_data_preprocessing.ipynb
 │   ├── 02_exploratory_data_analysis.ipynb
-│   └── ...
+│   ├── 03_statistical_methods.ipynb
+│   └── 04_data_mining.ipynb
 ├── src/                 # 專案原始碼模組
 │   ├── __init__.py
 │   └── data_loader.py   # 資料載入、路徑管理與下載邏輯
 ├── scripts/             # 工具腳本
 │   └── messages.py      # 跨平台 UTF-8 訊息系統
-├── logs/                # 執行日誌
-└── models/              # 已訓練模型存放
+├── docs/                # 專案文件（流程、進度、欄位說明）
+├── models/              # 已訓練模型存放（目前為空）
+└── reports/             # 報表輸出（目前為空）
 ```
 
 ---
