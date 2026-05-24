@@ -164,7 +164,7 @@ category data 中只有 employment_type 與結果有足夠關聯度
 - k-prototype
 
 
-# 完成前處理(5/18)
+# ~~完成前處理(5/18)~~
 詳情請見 01_data_pre_briefing.md
 03 step 已經列出處理前類別與處理後類別
 category: Chi-Square-independence
@@ -173,7 +173,7 @@ Interval/ratio: Mann-Whitney 只有 app_usage_frequency 做獨立同分布，其
 ratio 中例外: risk_score 做 t-test 異分布
 ordinal/interval/ratio: 混在一起做 spearman，篩出相關度>0.75的項目
 
-# 架構流程調整討論 (2026-05-21)
+~~# 架構流程調整討論 (2026-05-21)~~
 
 針對 docs/prediction_flow.md 的流程調整估時與風險評估：
 
@@ -229,3 +229,5 @@ scripts 的用途說明：
 Mann‑Whitney 清單硬寫未用 dict；Cell 16 依賴前一格 import；~~Chi‑square 只檢查期望次數未處理違反假設~~ 
 
 Briefing問題：結論缺乏可追溯性（無 p 值/樣本數/資料版本/對應 cell），多重比較未提；“Very different”僅視覺描述，建議量化標準。
+
+## 直接按照 prediction_flow 改整體流程(05/24)
