@@ -215,7 +215,7 @@ scripts 的用途說明：
 - 前切分：載入、資料品質檢查、變數分類、定義 target/features、train/val/test split、保存 raw/interim
 - 後處理：時間特徵、Winsor（只用 train 分位數）、log 轉換、編碼/標準化（只 fit train）、保存 processed
 
-## 補充整理（2026-05-22）
+## ~~補充整理（2026-05-22）~~
 - 整體架構（調整後）：DataLoader/Config → 前切分流程 → data/raw + data/interim → 後處理流程 → data/processed(train/val/test) → scripts/train|evaluate|interpret|report → reports/（供步驟 9）
 - scripts 是否必須：不強制；建議作為可重現 CLI。notebooks 保留敘事與可視化，僅呼叫 src 函式或 scripts 命令。
 - 全體流程應放：docs/prediction_flow.md 作為單一真相來源；若需要更細步驟對照，可新增 docs/pipeline.md（步驟→腳本/輸出路徑）。
@@ -223,7 +223,7 @@ scripts 的用途說明：
 - 可能修改：notebooks/01_data_preprocessing.ipynb、notebooks/04_data_mining.ipynb、Makefile(train/evaluate)、docs/prediction_flow.md、config.yaml（參數/路徑）。
 
 
-## 03_statistical_methods.ipynb (2026/05/21)
+~~## 03_statistical_methods.ipynb (2026/05/21)~~
 ~~Notebook重點問題：target 未定義，Cell 16/19/24 會 NameError；preprocessed_data_types 重複且第一版欄位名錯（*_Log1p, credit_score），易誤用；~~
 
 Mann‑Whitney 清單硬寫未用 dict；Cell 16 依賴前一格 import；~~Chi‑square 只檢查期望次數未處理違反假設~~ 
@@ -231,3 +231,10 @@ Mann‑Whitney 清單硬寫未用 dict；Cell 16 依賴前一格 import；~~Chi�
 Briefing問題：結論缺乏可追溯性（無 p 值/樣本數/資料版本/對應 cell），多重比較未提；“Very different”僅視覺描述，建議量化標準。
 
 ## 直接按照 prediction_flow 改整體流程(05/24)
+
+## 完成進度到資料品質評估的離群值檢查 (05/28)
+假定離群值對於預測 default_flag 有所幫助，因此予以保留
+
+## 分工(05/28)
+陳柏宇負責 02_data_quality.ipynb 中 編碼一致性 部分(詳細請見該 markdown block 陳述)
+陳霆漢負責 03_data_preprocessing.ipynb (詳情請見其內容陳述)
