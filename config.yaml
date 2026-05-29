@@ -51,54 +51,7 @@ kaggle:
   api_key: ""   # 留空則從環境變數 KAGGLE_KEY 讀取
 
 # ============================================================
-# 3. 資料快取設定
-# ============================================================
-cache:
-  # 是否使用本地快取（Kaggle 的預設快取目錄）
-  use_kagglehub_cache: true
-  
-  # 本地快取路徑（Kaggle 預設快取位置）
-  # Windows: C:\Users\{username}\.cache\kagglehub\datasets\...
-  # Linux/Mac: ~/.cache/kagglehub/datasets/...
-  # 通常無需修改，留空使用預設值
-  cache_dir: ""
-
-# ============================================================
-# 4. 離群值處理設定
-# ============================================================
-outlier_handling:
-  # 離群值檢測方法
-  # 選項: "iqr" (四分位距法) | "zscore" (Z-score 法)
-  detection_method: "iqr"
-  
-  # IQR 方法參數（離群值界限係數）
-  iqr_multiplier: 1.5
-  
-  # 各欄位的處理策略
-  # "keep": 保留（使用變換處理）
-  # "remove": 移除
-  field_strategies:
-    monthly_income:
-      action: "keep"
-      transform: "log"
-    repayment_delay_days:
-      action: "keep"
-      transform: "log1p"
-    debt_to_income_ratio:
-      action: "keep"
-      transform: "log"
-    purchase_amount:
-      action: "keep"
-      transform: "log"
-    credit_score:
-      action: "keep"
-      transform: "log"
-    missed_payments:
-      action: "keep"
-      transform: "log1p"
-
-# ============================================================
-# 5. 日誌記錄設定
+# 3. 日誌記錄設定
 # ============================================================
 logging:
   # 日誌記錄級別

@@ -13,14 +13,51 @@ from getpass import getpass
 
 import pandas as pd
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
 # 定義專案根目錄（相對於此檔案的兩層上層目錄）
 PROJECT_ROOT = Path(__file__).parent.parent.absolute()
+
+# 初始化預設日誌（臨時設定，會在載入 config 後更新）
+logger = logging.getLogger(__name__)
+
+
+def _setup_logging_from_config(config: Optional[Dict[str, Any]] = None):
+    """
+    從配置檔案設定日誌記錄器
+    
+    Args:
+        config: 設定字典，若為 None 則使用預設設定
+    """
+    # 清除現有的日誌處理器，避免重複記錄
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+    
+    # 若配置為 None 或未包含 logging 設定，使用預設值
+    if config is None or 'logging' not in config:
+        log_config = {
+            'level': 'INFO',
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        }
+    else:
+        log_config = config.get('logging', {})
+    
+    # 取得日誌等級
+    level_str = log_config.get('level', 'INFO').upper()
+    level = getattr(logging, level_str, logging.INFO)
+    
+    # 取得日誌格式
+    log_format = log_config.get('format', '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    
+    # 配置根日誌記錄器
+    logging.basicConfig(
+        level=level,
+        format=log_format
+    )
+
+
+# 先使用預設設定初始化日誌
+_setup_logging_from_config()
+logger = logging.getLogger(__name__)
+
 
 
 class ConfigLoader:
@@ -29,7 +66,7 @@ class ConfigLoader:
     @staticmethod
     def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
         """
-        載入 YAML 設定檔
+        載入 YAML 設定檔，並根據設定更新日誌配置
         
         Args:
             config_path: 設定檔路徑，相對於專案根目錄
@@ -50,6 +87,9 @@ class ConfigLoader:
         
         if not isinstance(config, dict):
             raise ValueError(f"設定檔格式錯誤，應為字典/對象: {config_path}")
+        
+        # 根據配置更新日誌設定
+        _setup_logging_from_config(config)
         
         logger.info(f"✅ 設定檔已載入: {config_path}")
         return cast(Dict[str, Any], config)
