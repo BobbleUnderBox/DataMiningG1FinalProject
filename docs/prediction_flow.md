@@ -18,8 +18,6 @@
 切割資料集：因為分類屬於預測任務，必須將資料切割為訓練集 (Training set)、驗證集(Validation set) 與測試集 (Test set) 。  
 避免資料外洩 (Data Leakage)：確保在切割資料前，沒有使用到未來預測時無法取得的資訊（例如不能用全部資料來做縮放或插值補值） 。
 
-演算法 -> 對應每一種資料前處理方式(`debt_to_income_ratio` 先做檢定再決定要不要除去 outliner)
-
 ## 步驟五：模式發現與建立模型 (Pattern Discovery and Modeling)
 選擇適合的演算法
 挑選特徵 (Feature selection) 
