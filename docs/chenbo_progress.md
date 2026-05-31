@@ -236,5 +236,5 @@ Briefing問題：結論缺乏可追溯性（無 p 值/樣本數/資料版本/對
 假定離群值對於預測 default_flag 有所幫助，因此予以保留
 
 ## 分工(05/28)
-陳柏宇負責 02_data_quality.ipynb 中 編碼一致性 部分(詳細請見該 markdown block 陳述)
-陳霆漢負責 03_data_preprocessing.ipynb (詳情請見其內容陳述)
+~~陳柏宇負責 02_data_quality.ipynb 中 編碼一致性 部分(詳細請見該 markdown block 陳述)~~
+~~陳霆漢負責 03_data_preprocessing.ipynb (詳情請見其內容陳述)~~
