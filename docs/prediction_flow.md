@@ -7,7 +7,7 @@
 產出形式:明確的類別標籤 1,0
 
 ## 資料理解
-請見 kaggle 上明確定義
+請見 kaggle 上明確定義 (https://www.kaggle.com/datasets/shree0910/buy-now-and-pay-later-fintech-ml-dataset)
 時間特徵的區分應該要放在這裡做
 
 ## 資料品質評估
@@ -21,8 +21,7 @@
 ## 步驟五：模式發現與建立模型 (Pattern Discovery and Modeling)
 選擇適合的演算法
 挑選特徵 (Feature selection) 
-設定參數
-如果應用場景需要，還必須考慮模型的「可解釋性 (Interpretability)」需求 。 在這個階段，模型會從資料中學習並找出分類規則 (Classification rules) 。
+建構模型
 
 ## 步驟六：模型評估 (Evaluation)
 這個階段要檢驗模型是否能推廣到未看過的資料 (Unseen data) 上 。
