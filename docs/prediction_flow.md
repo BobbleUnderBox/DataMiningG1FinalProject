@@ -19,8 +19,8 @@
 避免資料外洩 (Data Leakage)：確保在切割資料前，沒有使用到未來預測時無法取得的資訊（例如不能用全部資料來做縮放或插值補值） 。
 
 ## 步驟五：模式發現與建立模型 (Pattern Discovery and Modeling)
-選擇適合的演算法
-挑選特徵 (Feature selection) 
+選擇使用 Random Forest, XGBoost, DNN
+透過統計方法挑選特徵 (Feature selection) 
 建構模型
 
 ## 步驟六：模型評估 (Evaluation)
