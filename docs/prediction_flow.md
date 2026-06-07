@@ -36,9 +36,15 @@
 - 計算不同門檻下 混淆矩陣、Accuracy、Precision、Recall、F1-score
 
 ## 步驟七：超越指標的模式評估 (Pattern Evaluation Beyond Metrics)
-除了準確度，還要評估模型找出的分類模式是否能跨樣本穩定存在。確認這個分類結果是否有被拿來支持實際決策的價值 。
+說明 Evaluation 的各步驟情境意義
+比較三種模型在各步驟評估下的表現
 
-## 步驟八：解釋 (Interpretation)解
+總結
+- Is the pattern practically important? (說明因為是擬合出來的資料所以並訓練結果沒有實務價值)
+- What is the cost of acting on the pattern incorrectly? (說明一下問題理解部分的"邏輯上偽陰性代價會較高，因為判斷準時付款卻違約才可能造成公司實際損失")
+- What limitations must be reported? (說明讓 Recall 提升會造成甚麼問題?)
+
+## 步驟八：解釋 (Interpretation)
 釋模型為何會產生特定的預測或規則 。  釐清是哪些變數或特徵驅動了這個分類模式 ，並明確說明結果能適用於哪些群體 。
 
 ## 步驟九：溝通 (Communication)
