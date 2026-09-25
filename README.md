@@ -1,89 +1,121 @@
-# 🏦 BNPL 信用風險分類與預測項目
+# 🏦 BNPL 信用風險分類與預測
 
-> Buy-Now-Pay-Later (BNPL) 信用風險分類與預測  
-> 基於高階統計方法、資料採礦與機器學習的綜合資料科學項目
-
-## 📋 項目概覽
-
-本項目致力於構建一個**生產級資料科學項目**，用於預測 BNPL 平台用戶的信用風險。採用現代 Python 開發趨勢和 CCDS v2 標準化目錄架構，確保代碼可復用、可維護、易擴展。
+> Buy-Now-Pay-Later（先買後付）違約風險預測 — 統計方法與資料採礦期末專案
+> **Group 4**｜組員：張博勛、盧宸立、陳霆翰、陳柏宇
 
 ---
 
-## 📊 進度更新
+## 📋 專案概述
 
-### 最新 (5/22) - 現況盤點
-- ✅ 已有資料：`data/raw` 與 `data/processed/01_preprocessed.csv`
-- ⚠️ `data/interim` 尚未建立（但 config.yaml 已保留路徑）
-- ⚠️ `src` 目前僅有 `data_loader.py`；`scripts` 目前只有 `messages.py`
-- ⚠️ `03_statistical_methods.ipynb` 仍有讀檔與欄位問題，`04_data_mining.ipynb` 尚待整理
+先買後付（BNPL）是近年成長最快的金融科技領域之一。本專案使用 [Kaggle 合成資料集](https://www.kaggle.com/datasets/shree0910/buy-now-and-pay-later-fintech-ml-dataset)（模擬 2023–2024 年、6 個國家、10,345 筆 BNPL 交易紀錄），以 `default_flag`（是否違約）為目標變數，完整走過一次 CRISP-DM 流程：資料理解 → 資料品質檢查 → 前處理 → 統計檢定特徵篩選 → 建模（Random Forest / XGBoost / DNN）→ 評估 → 商業意涵解讀 → SHAP 模型解釋。
 
-### 最新 (5/7) - Windows 相容性與穩定性優化
-- ✅ **解決 Makefile 亂碼**：實作 Python 基礎的訊息系統 (`scripts/messages.py`)，確保 Windows 終端機正確顯示中文與 Emoji。
-- ✅ **路徑自動解析**：修正筆記本路徑問題，透過 `PROJECT_ROOT` 自動偵測，確保 `data/` 永遠位於專案根目錄。
-- ✅ **環境驗證修復**：修正 `pyproject.toml` 設定錯誤，確保 `make install-all` 流程順暢。
-- ✅ **任務自動化**：優化 `Makefile` 任務，支援一鍵安裝、環境資訊顯示與資料同步。
-
-### 階段性達成 (5/6) - 專案架構重組
-- ✅ **模組化重構**：將資料處理邏輯遷移至 `src/data_loader.py`，提升代碼複用性。
-- ✅ **配置中心化**：引入 `config.yaml` 統一管理資料路徑、Kaggle API 與離群值處理策略。
-- ✅ **現代化包裝**：採用 `pyproject.toml` 取代傳統 requirements，建立生產級專案標準。
-- ✅ **清理與規範**：清理冗餘暫存檔，並建立完善的 `.gitignore` 規則。
-
-### 5/4
-- ✅ 從 Kaggle 取得資料
-- ✅ 分類資料型態（類別型、順序型、區間型、比率型）
-- ✅ 執行初步探索性資料分析 (EDA)
-- ✅ 生成視覺化圖表
+**重要聲明（EDA 發現的抽樣偏誤）：** 此資料集為合成資料，存在月薪未依國家區分、信用分數統一套用美國 FICO 範圍、違約比例偏高（39% vs. 真實世界個位數 %）等偏誤，**不適用於實務風控部署**，僅供統計檢定方法與建模流程練習。完整簡報見 [`docs/BNPL_FinalReport.pdf`](docs/)（另附投影片 PDF）。
 
 ---
 
-## 📋 欄位說明
+## 🏆 專案成果摘要
 
-| 欄位 | 型態 | 說明 |
-|------|------|------|
-| user_id | int | 唯一使用者id |
-| age | int | 使用者年齡（18–59 歲） |
-| employment_type | str | 全職 / 自僱 / 學生 / 失業 |
-| monthly_income | float | 月收入（美元） |
-| credit_score | int | 標準信用評分（300–850） |
-| purchase_amount | float | BNPL 交易金額（美元） |
-| product_category | str | 電子產品、服裝、運動、家居、美容 |
-| bnpl_installments | int | 分期次數（3、6、9、12 期） |
-| repayment_delay_days | int | 逾期天數（0–33 天） |
-| missed_payments | int | 過去漏繳分期付款的總次數（0–7 次） |
-| default_flag | int | **target：** 1 = 違約，0 = 已付款 ✅ |
-| app_usage_frequency | float | 應用程式每週開啟次數 |
-| location | str | 國家（美國、印度、英國、德國、加拿大、澳洲） |
-| transaction_date | str | 購買日期（YYYY-MM-DD） |
-| debt_to_income_ratio | float | 債務收入比（月債務 / 月收入） |
-| risk_score | float | 風險評分（0–398）— 越高越危險 |
-| customer_segment | str | 低風險 / 中風險 / 高風險 |
+### 特徵篩選（17 → 9 個特徵）
+
+僅使用訓練集（防止 data leakage）進行卡方檢定 + WoE/IV（類別變數）、Mann-Whitney U 檢定（次序/區間/比率變數）與 Spearman 相關係數（共線性檢查，門檻 |r| ≥ 0.85），最終保留 9 個特徵：
+
+`employment_type`、`product_category`、`missed_payments`、`transaction_dayofweek`、`age`、`monthly_income`、`purchase_amount`、`repayment_delay_days`、`debt_to_income_ratio`
+
+被移除者包含：`user_id`（無關）、`risk_score` / `credit_score` / `customer_segment`（與 target 高度相關的冗餘變數，直接使用會造成 data leakage）、`location` / `transaction_is_weekend`（卡方不顯著）、`bnpl_installments` / `app_usage_frequency` / `transaction_year` / `month` / `day`（MWU 不顯著）。
+
+### 模型表現（80/20 分層切割，測試集 n=2,069）
+
+因「預測不違約但實際違約」（False Negative）代價極高，評估以 **F2-Score**（Recall 權重為 Precision 兩倍）選定決策門檻：
+
+| 模型 | ROC-AUC | PR-AUC | Recall @F2最佳門檻 | Precision @F2最佳門檻 | F2-Score |
+|---|---|---|---|---|---|
+| Random Forest（`class_weight=balanced`） | 0.7595 | 0.6896 | 0.9950 | 0.4658 | 0.8108 |
+| XGBoost（`scale_pos_weight`） | 0.7577 | 0.6808 | 0.9926 | 0.4685 | 0.8111 |
+| DNN / MLP（Keras） | **0.7672** | **0.6950** | 0.9790 | 0.4829 | **0.8121** |
+
+三個模型排序能力與機率校準（decile calibration）皆接近，DNN 略優且無過擬合/崩跌現象；三者一致認為 **`monthly_income`、`repayment_delay_days`、`missed_payments`、`debt_to_income_ratio`** 是最重要的違約驅動因子（以 SHAP 驗證，方向符合金融直覺：收入越高、負債比越低則違約機率下降；逾期天數與漏繳次數越多則違約機率上升）。
+
+### 限制與應用邊界
+
+- 合成資料與真實分布有落差，具體門檻/機率數值無法直接落地；但**特徵篩選邏輯、門檻選擇策略、SHAP 驅動的拒絕原因說明**等方法論可遷移至真實場景。
+- 模型捕捉的是與違約高度相關的行為訊號（相關性），非違約的根本原因（因果）；且缺乏時序性特徵（近期遲繳趨勢）與壓力特徵，仍有精進空間。
+- 建議用途：輔助風控單位制定業務規則／門檻，或作為高風險客戶被拒絕的主要因子說明；**不應**用於全自動決策而無人工覆核，尤其面對極端值或資料不足的少數族群。
+
+詳細方法論、圖表與商業意涵討論，見 [`docs/prediction_flow.md`](docs/prediction_flow.md) 與各 `notebooks/0X_*.ipynb`。
 
 ---
 
 ## 📁 專案結構
 
 ```text
-dataMining/
-├── config.yaml          # 全域設定檔（路徑、參數、策略）
-├── pyproject.toml       # 專案依賴與現代化打包設定
-├── Makefile             # 自動化任務腳本（Windows/Unix 雙支援）
-├── data/                # 資料目錄
-│   ├── raw/             # 原始資料（Kaggle 下載）
-│   └── processed/       # 目前已產出處理結果（01_preprocessed.csv）
-├── notebooks/           # Jupyter Notebooks 分析流程
-│   ├── 01_data_preprocessing.ipynb
-│   ├── 02_exploratory_data_analysis.ipynb
-│   ├── 03_statistical_methods.ipynb
-│   └── 04_data_mining.ipynb
-├── src/                 # 專案原始碼模組
-│   ├── __init__.py
-│   └── data_loader.py   # 資料載入、路徑管理與下載邏輯
-├── scripts/             # 工具腳本
-│   └── messages.py      # 跨平台 UTF-8 訊息系統
-├── docs/                # 專案文件（流程、進度、欄位說明）
-├── models/              # 已訓練模型存放（目前為空）
-└── reports/             # 報表輸出（目前為空）
+DataMiningG1FinalProject/
+├── config.yaml            # 全域設定檔（資料路徑、Kaggle 認證、日誌）
+├── pyproject.toml         # 專案依賴與現代化打包設定
+├── Makefile                # 自動化任務（環境建立、安裝、資料同步、測試）
+├── CLAUDE.md               # 開發者/AI 協作指南（指令、架構、流程細節）
+├── data/
+│   ├── raw/                # 原始 Kaggle CSV（10,345 筆）
+│   ├── interim/             # 01/02 階段輸出（資料理解、特徵篩選中繼結果）
+│   └── processed/          # 03 階段輸出：rf/xgb/dnn 各自的 train/test CSV
+├── notebooks/               # CRISP-DM 流程，依序執行 01 → 08
+│   ├── 01_data_understanding.ipynb    # 欄位盤點、型態分類、時間特徵拆解
+│   ├── 02_data_quality.ipynb          # 缺失值/重複值/離群值/標籤雜訊檢查
+│   ├── 03_data_preprocessing.ipynb    # 先切分再前處理（防止 leakage），三模型各自編碼
+│   ├── 04_statistical_methods.ipynb   # 卡方+WoE/IV、Mann-Whitney U、Spearman 特徵篩選
+│   ├── 05_modeling.ipynb              # 訓練 Random Forest / XGBoost / DNN
+│   ├── 06_evaluation.ipynb            # 機率校準、ROC/PR 曲線、F2 門檻選擇、混淆矩陣
+│   ├── 07_beyond_metrics.ipynb        # 商業情境下的指標意涵與取捨
+│   └── 08_explain.ipynb               # SHAP 模型解釋
+├── models/                  # 已訓練模型（rf_model.joblib, xgb_model.joblib, dnn_model.keras）
+├── src/data_loader.py       # 唯一的原始碼模組：資料載入 / 下載 / 存取路徑管理
+├── docs/                    # prediction_flow.md（流程文件）、期末簡報 PDF
+└── tests/                   # pytest（目前為空，pyproject 已配置 pytest/pytest-cov）
 ```
 
+> 目前專案以 Jupyter Notebook 驅動分析（無 CLI pipeline），`src/` 僅提供資料 I/O。完整指令與架構細節見 [`CLAUDE.md`](CLAUDE.md)。
+
 ---
+
+## 📊 資料欄位說明
+
+原始資料 17 欄，其中 `transaction_date` 於 01 階段拆解為年/月/日/星期幾/是否週末（17 → 21 欄）。
+
+| 欄位 | 型態分類 | 說明 |
+|------|------|------|
+| user_id | 冗餘（刪除） | 唯一使用者 id，與 target 無關 |
+| age | Ratio | 使用者年齡（18–59 歲） |
+| employment_type | Category | Salaried / Self-Employed / Student / Unemployed |
+| monthly_income | Ratio | 月收入（美元） |
+| credit_score | 冗餘（刪除） | 標準信用評分（300–850），統一套用美國 FICO 範圍，跨國偏誤嚴重 |
+| purchase_amount | Ratio | BNPL 交易金額（美元） |
+| product_category | Category | Fashion / Electronics / Beauty / Home / Sports |
+| bnpl_installments | Ordinal | 分期次數（3、6、9、12 期） |
+| repayment_delay_days | Ratio | 逾期天數（0–33 天） |
+| missed_payments | Ordinal | 過去漏繳分期付款的總次數（0–7 次） |
+| default_flag | **Target** | 1 = 違約，0 = 已付款（違約率 39.05%，實務通常個位數 %） |
+| app_usage_frequency | Ratio | 應用程式每週開啟次數 |
+| location | Category（不顯著，刪除） | 國家（美國、印度、英國、德國、加拿大、澳洲） |
+| transaction_date | — | 購買日期，拆解為 year/month/day/dayofweek/is_weekend 後刪除 |
+| debt_to_income_ratio | Ratio | 債務收入比（月債務 / 月收入） |
+| risk_score | 冗餘（刪除） | 風險評分（0–398），與 target Spearman 相關 0.39，會造成 leakage |
+| customer_segment | 冗餘（刪除） | Low / Medium / High Risk，分群邏輯與 target 高度相關 |
+
+---
+
+## 🚀 快速開始
+
+```bash
+make env-info          # 檢查目前使用的 Python/pip 環境
+make setup-venv         # 建立 ./.venv
+make install-all        # 安裝依賴（pip install -e ".[dev,ml]"）
+make data               # 載入資料（優先讀 data/raw，否則從 Kaggle 下載）
+make test                # 執行 pytest tests/ -v
+```
+
+安裝完成後，依序在 Jupyter / VS Code 中執行 `notebooks/01_data_understanding.ipynb` 至 `notebooks/08_explain.ipynb`（每個 notebook 讀取前一階段輸出，須依序執行，勿跳階段）。完整指令、環境細節與資料流見 [`CLAUDE.md`](CLAUDE.md)。
+
+---
+
+## 👥 團隊
+
+Group 4：張博勛、盧宸立、陳霆翰、陳柏宇
